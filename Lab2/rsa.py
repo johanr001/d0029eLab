@@ -34,13 +34,18 @@ def generate_rsa_key(p, q, e):
 
 def main():
 
-    #Test of keygen
-    p = 17
+    #Test of keygen. Result of this should be: e=7, n=187, d=23
+    #p = 17
+    #q = 11
+    #e = 7
 
-    q = 11
+    p=int('F7E75FDC469067FFDC4E847C51F452DF', 16)
 
-    e = 7
+    q=int('E85CED54AF57E53E092113E62F436F4F', 16)
 
-    print(generate_rsa_key(p, q, e) , "Result should be: e=7, n=187, d=23")
+    e=int('0D88C3', 16)
+
+
+    print(generate_rsa_key(p, q, e))
 
 main()
