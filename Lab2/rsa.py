@@ -44,7 +44,7 @@ def generate_rsa_key(p, q, e):
     return pub_k, pri_k
 
 def rsa_encrypt(message, public_key):
-    #M = message , Only needed for testing
+    #M = message , Only needed for one test with message 88
 
     #Conversion to int
     M = int.from_bytes(message.encode(), 'big')   
