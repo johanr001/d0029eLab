@@ -1,4 +1,4 @@
-import math
+
 
 #Function for Extended Euclidian Algorithm
 def egcd(x, y):
@@ -28,9 +28,6 @@ def generate_rsa_key(p, q, e):
     #First we calculate n and it's totient
     n=p*q
     tot_n_ham = (p-1)*(q-1)
-    
-    #Select e, Apparently not needed
-    #e = math.gcd(tot_n_ham, e)
     
     #Determine d
     d = getModInv(e, tot_n_ham)
