@@ -9,8 +9,8 @@ def egcd(x, y):
         g, h, i = egcd(y % x, x)
         return (g, i - (y // x) * h, h)
 
-#Function to do modular inverse
-def modInv(e, p):
+#Function to get modular inverse
+def getModInv(e, p):
     g, h, i = egcd(e, p)
     if g != 1:
         raise Exception("No modular inverse exists")
@@ -20,6 +20,11 @@ def modInv(e, p):
 
 def generate_rsa_key(p, q, e):
     
+    #Conversion to int
+    p=int(p, 16)
+    q=int(q, 16)
+    e=int(e, 16)
+
     #First we calculate n and it's totient
     n=p*q
     tot_n_ham = (p-1)*(q-1)
@@ -28,31 +33,56 @@ def generate_rsa_key(p, q, e):
     #e = math.gcd(tot_n_ham, e)
     
     #Determine d
-    d = modInv(e, tot_n_ham)
+    d = hex(getModInv(e, tot_n_ham))
 
     #Return the public key (e, n) and the private key d
 
-    pub_k = (e, n)
+    pub_k = (hex(e), hex(n))
 
     return pub_k, d
 
+def rsa_encrypt(message, public_key):
+
+    M = int.from_bytes(message.encode(), 'big')
+
+    e=int(public_key[0], 16)
+
+    n=int(public_key[1], 16)
+
+    C = pow(M, e) % n
+
+    return hex(C)
 
 
 def main():
 
     #Test of keygen. Result of this should be: e=7, n=187, d=23
-    p = 17
-    q = 11
-    e = 7
+    #p = hex(17)
+    #q = hex(11)
+    #e = hex(7)
 
     #Other test
 
-    #p=int('F7E75FDC469067FFDC4E847C51F452DF', 16)
+    p='F7E75FDC469067FFDC4E847C51F452DF'
 
-    #q=int('E85CED54AF57E53E092113E62F436F4F', 16)
+    q='E85CED54AF57E53E092113E62F436F4F'
 
-    #e=int('0D88C3', 16)
+    e='0D88C3'
 
     print(generate_rsa_key(p, q, e))
+
+    #Test of encryption
+
+    msg = "A top secret!"
+
+    e2='010001'
+
+    n='DCBFFE3E51F62E09CE7032E2677A78946A849DC4CDDE3A4D0CB81629242FB1A5'
+
+    pub_k = (e2, n)
+
+    print(rsa_encrypt(msg, pub_k))
+
+
 
 main()
