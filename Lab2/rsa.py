@@ -60,7 +60,6 @@ def rsa_decrypt(ciphertext, private_key):
     n = int(private_key[1], 16)
 
     M = hex(pow(C, d, n)).replace(' ', '').replace('0x', '').replace('\t', '').replace('\n', '')
-    print(M)
 
     #Convert plaintext to ascii string and return
     pt = bytes.fromhex(M).decode("utf-8")
