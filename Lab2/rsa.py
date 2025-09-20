@@ -1,22 +1,4 @@
 
-
-#Function for Extended Euclidian Algorithm
-def egcd(x, y):
-    if x == 0:
-        return (y, 0, 1)
-    
-    else:
-        g, h, i = egcd(y % x, x)
-        return (g, i - (y // x) * h, h)
-
-#Function to get modular inverse
-def getModInv(e, p):
-    g, h, _ = egcd(e, p)
-    if g != 1:
-        raise Exception("No modular inverse exists")
-    else:
-        return h % p
-
 def generate_rsa_key(p, q, e):
     #Conversion to int
     p=int(p, 16)
@@ -27,8 +9,8 @@ def generate_rsa_key(p, q, e):
     n=p*q
     tot_n_ham = (p-1)*(q-1)
     
-    #Determine d
-    d = getModInv(e, tot_n_ham)
+    #Determine d by calculating modular inverse
+    d = pow(e, -1, tot_n_ham)
 
     #Return the public key (e, n) and the private key (d, n)
     pub_k = (hex(e), hex(n))

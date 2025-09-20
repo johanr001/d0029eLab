@@ -1,0 +1,17 @@
+
+#Function for Extended Euclidian Algorithm
+def egcd(x, y):
+    if x == 0:
+        return (y, 0, 1)
+    
+    else:
+        g, h, i = egcd(y % x, x)
+        return (g, i - (y // x) * h, h)
+
+#Function to get modular inverse
+def getModInv(e, p):
+    g, h, _ = egcd(e, p)
+    if g != 1:
+        raise Exception("No modular inverse exists")
+    else:
+        return h % p
