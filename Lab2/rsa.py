@@ -40,6 +40,40 @@ def rsa_decrypt(ciphertext, private_key):
     pt = bytes.fromhex(M).decode("utf-8")
     return pt
 
+# Like decrypt and encrypt, but without the conversions
+def rsa_crypt(input, key):
+    text = int(input, 16)
+    exponent = int(key[0], 16)
+    modulus = int(key[1], 16)
+
+    return hex(pow(text, exponent, modulus)).replace('0x', '')
+
+# Runs all the tests belonging to task 2
+class task2:
+
+    def task2_1():
+        msg1 = "I owe you $2000."
+        msg2 = "I owe you $3000."
+        p='F7E75FDC469067FFDC4E847C51F452DF'
+        q='E85CED54AF57E53E092113E62F436F4F'
+        e='0D88C3'
+
+        pri_k  = generate_rsa_key(p, q, e)[1]
+
+        print("Sign 1 = ", rsa_encrypt(msg1, pri_k),"\n")
+        print("Sign 2 = ", rsa_encrypt(msg2, pri_k))
+
+    def task2_2():
+        msg = "Launch a missile." # Not used
+        sig = "643D6F34902D9C7EC90CB0B2BCA36C47FA37165C0005CAB026C0542CBDB6802F"
+        sig_cor = "643D6F34902D9C7EC90CB0B2BCA36C47FA37165C0005CAB026C0542CBDB6803F"
+        e = "010001"
+        n = "AE1CD4DC432798D933779FBD46C6E1247F0CF1233595113AA51B450F18116115"
+
+        print("Normal in ASCII: ", rsa_decrypt(sig, (e, n)), "\n")
+        print("Normal in hexadecimal: ", rsa_crypt(sig, (e, n)), "\n")
+        print("Corrupted signature in hexadecimal: ", rsa_crypt(sig_cor, (e, n)))
+
 
 
 def main():
@@ -85,4 +119,5 @@ def main():
 
 
 
-main()
+if __name__ == "__main__":
+    main()
