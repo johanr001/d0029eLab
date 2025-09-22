@@ -37,8 +37,8 @@ def rsa_decrypt(ciphertext, private_key):
     M = hex(pow(C, d, n)).replace('0x', '')
     
     #Convert plaintext to ascii string and return
-    pt = bytes.fromhex(M).decode("utf-8")
-    return pt
+    
+    return M
 
 
 
@@ -81,8 +81,42 @@ def main():
     d2 = '74D806F9F3A62BAE331FFE3F0A68AFE35B3D2E4794148AACBC26AA381CD7D30D'
     pri_k = (d2, n2)
 
-    print(rsa_decrypt(ct, pri_k))
+    print(bytes.fromhex(rsa_decrypt(ct, pri_k)).decode("utf-8"))
 
+    #Test task 2.1
+
+    p2='F7E75FDC469067FFDC4E847C51F452DF'
+    q2='E85CED54AF57E53E092113E62F436F4F'
+    e3='0D88C3'
+
+    keys=generate_rsa_key(p2, q2, e3)
+    pub_k2=keys[0]
+    pri_k2=keys[1]
+
+    msg2="I owe you $2000."
+
+    msg3="I owe you $3000"
+
+    print("Sign 1: " , rsa_encrypt(msg2, pri_k2))
+
+    print("Sign 2: " , rsa_encrypt(msg3, pri_k2))
+
+    #Test task 2.2
+
+    msg3="Launch a missile."
+
+    S2='643D6F34902D9C7EC90CB0B2BCA36C47FA37165C0005CAB026C0542CBDB6802F'
+
+    S2_cor = '643D6F34902D9C7EC90CB0B2BCA36C47FA37165C0005CAB026C0542CBDB6803F'
+
+    e4='010001'
+
+    n3='AE1CD4DC432798D933779FBD46C6E1247F0CF1233595113AA51B450F18116115'
+
+    pub_k3=(e4, n3)
+
+    print("Normal: ", bytes.fromhex(rsa_decrypt(S2, pub_k3)).decode("utf-8"))
+    print("With corrupted signature: ", rsa_decrypt(S2_cor, pub_k3)) #Cannot decode with utf-8 since it cannot decode arbitrary byte strings
 
 
 main()
