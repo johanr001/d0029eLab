@@ -38,7 +38,9 @@ def rsa_decrypt(ciphertext, private_key):
     
     #Convert plaintext to ascii string and return
     
-    return M
+    pt=bytes.fromhex(M).decode("utf-8", errors="replace")
+
+    return pt
 
 
 
@@ -81,7 +83,7 @@ def main():
     d2 = '74D806F9F3A62BAE331FFE3F0A68AFE35B3D2E4794148AACBC26AA381CD7D30D'
     pri_k = (d2, n2)
 
-    print(bytes.fromhex(rsa_decrypt(ct, pri_k)).decode("utf-8"))
+    print(rsa_decrypt(ct, pri_k))
 
     #Test task 2.1
 
@@ -115,7 +117,7 @@ def main():
 
     pub_k3=(e4, n3)
 
-    print("Normal: ", bytes.fromhex(rsa_decrypt(S2, pub_k3)).decode("utf-8"))
+    print("Normal: ", rsa_decrypt(S2, pub_k3))
     print("With corrupted signature: ", rsa_decrypt(S2_cor, pub_k3)) #Cannot decode with utf-8 since it cannot decode arbitrary byte strings
 
 
