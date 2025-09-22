@@ -1,3 +1,4 @@
+import hashlib
 
 def generate_rsa_key(p, q, e):
     #Conversion to int
@@ -40,6 +41,17 @@ def rsa_decrypt(ciphertext, private_key):
     pt = bytes.fromhex(M).decode("utf-8")
     return pt
 
+def sign_md5_hash(msg, private_key):
+    hash = get_hash(msg)
+    return rsa_crypt(hash, (private_key[0], private_key[1]))
+
+def verify_md5_hash(msg, sig, public_key):
+    message_hash = get_hash(msg)
+    comparison = rsa_crypt(sig, (public_key[0], public_key[1]))
+    return comparison == message_hash
+
+# --- Help functions ---
+
 # Like decrypt and encrypt, but without the conversions
 def rsa_crypt(input, key):
     text = int(input, 16)
@@ -47,6 +59,54 @@ def rsa_crypt(input, key):
     modulus = int(key[1], 16)
 
     return hex(pow(text, exponent, modulus)).replace('0x', '')
+
+# Returns hash of given message
+def get_hash(message):
+    message = message.encode()
+    return hashlib.md5(message).hexdigest()
+
+# Tests for task 1
+class task1:
+
+    # Test of keygen. Result of this should be: e=7, n=187, d=23
+    def task1_1():
+        #p = hex(17)
+        #q = hex(11)
+        #e = hex(7)
+
+        #Other test
+
+        p='F7E75FDC469067FFDC4E847C51F452DF'
+        q='E85CED54AF57E53E092113E62F436F4F'
+        e='0D88C3'
+
+        print(generate_rsa_key(p, q, e))
+    
+    # Test of encryption
+    def task1_2():
+        msg = "A top secret!"
+        e2='010001'
+        n2='DCBFFE3E51F62E09CE7032E2677A78946A849DC4CDDE3A4D0CB81629242FB1A5'
+
+        #Other test, Result of this should be: C=11
+        #M = message , Only needed in encryption function for this one test
+        #msg=88
+        #e2=hex(7)
+        #n=hex(187)
+
+    # Test of decryption
+    def task1_3():
+        
+        pub_k = (e2, n2)
+        print(rsa_encrypt(msg, pub_k))
+        #ct=rsa_encrypt(msg, pub_k)
+        #print(ct)
+        
+        ct = '8C0F971DF2F3672B28811407E2DABBE1DA0FEBBBDFC7DCB67396567EA1E2493F'
+        d2 = '74D806F9F3A62BAE331FFE3F0A68AFE35B3D2E4794148AACBC26AA381CD7D30D'
+        pri_k = (d2, n2)
+
+        print(rsa_decrypt(ct, pri_k))
 
 # Runs all the tests belonging to task 2
 class task2:
@@ -74,49 +134,23 @@ class task2:
         print("Normal in hexadecimal: ", rsa_crypt(sig, (e, n)), "\n")
         print("Corrupted signature in hexadecimal: ", rsa_crypt(sig_cor, (e, n)))
 
+    # Not necessarily asked for, but checks whether or not the verification and signing works
+    def task2_4():
+        msg = "I owe you $2000."
+        p='F7E75FDC469067FFDC4E847C51F452DF'
+        q='E85CED54AF57E53E092113E62F436F4F'
+        e='0D88C3'
+
+        temp = generate_rsa_key(p, q, e)
+        pub_k = temp[0]
+        pri_k = temp[1]
+
+        sig = sign_md5_hash(msg, pri_k)
+        print(verify_md5_hash(msg, sig, pub_k))
 
 
 def main():
-
-    #Test of keygen. Result of this should be: e=7, n=187, d=23
-    #p = hex(17)
-    #q = hex(11)
-    #e = hex(7)
-
-    #Other test
-
-    p='F7E75FDC469067FFDC4E847C51F452DF'
-
-    q='E85CED54AF57E53E092113E62F436F4F'
-
-    e='0D88C3'
-
-    print(generate_rsa_key(p, q, e))
-
-    #Test of encryption
-
-    msg = "A top secret!"
-    e2='010001'
-    n2='DCBFFE3E51F62E09CE7032E2677A78946A849DC4CDDE3A4D0CB81629242FB1A5'
-
-    #Other test, Result of this should be: C=11
-    #M = message , Only needed in encryption function for this one test
-    #msg=88
-    #e2=hex(7)
-    #n=hex(187)
-
-    #Test of decryption
-    pub_k = (e2, n2)
-    print(rsa_encrypt(msg, pub_k))
-    #ct=rsa_encrypt(msg, pub_k)
-    #print(ct)
-    
-    ct = '8C0F971DF2F3672B28811407E2DABBE1DA0FEBBBDFC7DCB67396567EA1E2493F'
-    d2 = '74D806F9F3A62BAE331FFE3F0A68AFE35B3D2E4794148AACBC26AA381CD7D30D'
-    pri_k = (d2, n2)
-
-    print(rsa_decrypt(ct, pri_k))
-
+    task2.task2_4()
 
 
 if __name__ == "__main__":
