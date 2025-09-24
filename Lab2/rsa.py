@@ -19,7 +19,7 @@ def generate_rsa_key(p, q, e):
 
 def rsa_encrypt(message, public_key):
     #Conversion to int
-    M = int.from_bytes(message.encode(), 'big')   
+    M = int.from_bytes(message.encode(), 'big')
     e=int(public_key[0], 16)
     n=int(public_key[1], 16)
 
@@ -43,82 +43,99 @@ def rsa_decrypt(ciphertext, private_key):
     return pt
 
 
+class Task1Tests:
+
+    def task1_1():
+        #Test of keygen. Result of this should be: e=7, n=187, d=23
+        #p = hex(17)
+        #q = hex(11)
+        #e = hex(7)
+
+        #Other test
+
+        p='F7E75FDC469067FFDC4E847C51F452DF'
+
+        q='E85CED54AF57E53E092113E62F436F4F'
+
+        e='0D88C3'
+
+        print(generate_rsa_key(p, q, e))
+
+    def task1_2():
+        #Test of encryption
+        msg = "A top secret!"
+        e='010001'
+        n='DCBFFE3E51F62E09CE7032E2677A78946A849DC4CDDE3A4D0CB81629242FB1A5'
+
+        #Other test, Result of this should be: C=11
+        #M = message , Only needed in encryption function for this one test
+        #msg=88
+        #e2=hex(7)
+        #n=hex(187)
+
+        pub_k = (e, n)
+        print(rsa_encrypt(msg, pub_k))
+        #ct=rsa_encrypt(msg, pub_k)
+        #print(ct)
+
+    
+    def task1_3():
+        n='DCBFFE3E51F62E09CE7032E2677A78946A849DC4CDDE3A4D0CB81629242FB1A5'
+        #Test of decryption
+        
+        ct = '8C0F971DF2F3672B28811407E2DABBE1DA0FEBBBDFC7DCB67396567EA1E2493F'
+        d = '74D806F9F3A62BAE331FFE3F0A68AFE35B3D2E4794148AACBC26AA381CD7D30D'
+        pri_k = (d, n)
+
+        print(rsa_decrypt(ct, pri_k))
+
+class Task2Tests:
+
+    def task2_1():
+        #Test task 2.1
+        p='F7E75FDC469067FFDC4E847C51F452DF'
+        q='E85CED54AF57E53E092113E62F436F4F'
+        e='0D88C3'
+
+        keys=generate_rsa_key(p, q, e)
+        pub_k=keys[0]
+        pri_k=keys[1]
+
+        msg1="I owe you $2000."
+
+        msg2="I owe you $3000"
+
+        print("Sign 1: " , rsa_encrypt(msg1, pri_k))
+
+        print("Sign 2: " , rsa_encrypt(msg2, pri_k))
+
+    def task2_2():
+        #Test task 2.2
+
+        msg3="Launch a missile."
+
+        S2='643D6F34902D9C7EC90CB0B2BCA36C47FA37165C0005CAB026C0542CBDB6802F'
+
+        S2_cor = '643D6F34902D9C7EC90CB0B2BCA36C47FA37165C0005CAB026C0542CBDB6803F'
+
+        e4='010001'
+
+        n3='AE1CD4DC432798D933779FBD46C6E1247F0CF1233595113AA51B450F18116115'
+
+        pub_k3=(e4, n3)
+
+        print("Normal: ", rsa_decrypt(S2, pub_k3))
+        print("With corrupted signature: ", rsa_decrypt(S2_cor, pub_k3)) #Cannot decode with utf-8 since it cannot decode arbitrary byte strings
+
 
 def main():
-
-    #Test of keygen. Result of this should be: e=7, n=187, d=23
-    #p = hex(17)
-    #q = hex(11)
-    #e = hex(7)
-
-    #Other test
-
-    p='F7E75FDC469067FFDC4E847C51F452DF'
-
-    q='E85CED54AF57E53E092113E62F436F4F'
-
-    e='0D88C3'
-
-    print(generate_rsa_key(p, q, e))
-
-    #Test of encryption
-
-    msg = "A top secret!"
-    e2='010001'
-    n2='DCBFFE3E51F62E09CE7032E2677A78946A849DC4CDDE3A4D0CB81629242FB1A5'
-
-    #Other test, Result of this should be: C=11
-    #M = message , Only needed in encryption function for this one test
-    #msg=88
-    #e2=hex(7)
-    #n=hex(187)
-
-    #Test of decryption
-    pub_k = (e2, n2)
-    print(rsa_encrypt(msg, pub_k))
-    #ct=rsa_encrypt(msg, pub_k)
-    #print(ct)
+    Task1Tests.task1_1()
+    Task1Tests.task1_2()
+    Task1Tests.task1_3()
+    Task2Tests.task2_1()
+    Task2Tests.task2_2()
     
-    ct = '8C0F971DF2F3672B28811407E2DABBE1DA0FEBBBDFC7DCB67396567EA1E2493F'
-    d2 = '74D806F9F3A62BAE331FFE3F0A68AFE35B3D2E4794148AACBC26AA381CD7D30D'
-    pri_k = (d2, n2)
-
-    print(rsa_decrypt(ct, pri_k))
-
-    #Test task 2.1
-
-    p2='F7E75FDC469067FFDC4E847C51F452DF'
-    q2='E85CED54AF57E53E092113E62F436F4F'
-    e3='0D88C3'
-
-    keys=generate_rsa_key(p2, q2, e3)
-    pub_k2=keys[0]
-    pri_k2=keys[1]
-
-    msg2="I owe you $2000."
-
-    msg3="I owe you $3000"
-
-    print("Sign 1: " , rsa_encrypt(msg2, pri_k2))
-
-    print("Sign 2: " , rsa_encrypt(msg3, pri_k2))
-
-    #Test task 2.2
-
-    msg3="Launch a missile."
-
-    S2='643D6F34902D9C7EC90CB0B2BCA36C47FA37165C0005CAB026C0542CBDB6802F'
-
-    S2_cor = '643D6F34902D9C7EC90CB0B2BCA36C47FA37165C0005CAB026C0542CBDB6803F'
-
-    e4='010001'
-
-    n3='AE1CD4DC432798D933779FBD46C6E1247F0CF1233595113AA51B450F18116115'
-
-    pub_k3=(e4, n3)
-
-    print("Normal: ", rsa_decrypt(S2, pub_k3))
-    print("With corrupted signature: ", rsa_decrypt(S2_cor, pub_k3)) #Cannot decode with utf-8 since it cannot decode arbitrary byte strings
 
 
-main()
+if __name__ == "__main__":
+    main()
