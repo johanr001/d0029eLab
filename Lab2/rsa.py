@@ -89,6 +89,11 @@ class Task1Tests:
 
         print(rsa_decrypt(ct, pri_k))
 
+    def runAll():
+        Task1Tests.task1_1()
+        Task1Tests.task1_2()
+        Task1Tests.task1_3()
+
 class Task2Tests:
 
     def task2_1():
@@ -126,14 +131,15 @@ class Task2Tests:
 
         print("Normal: ", rsa_decrypt(S2, pub_k3))
         print("With corrupted signature: ", rsa_decrypt(S2_cor, pub_k3)) #Cannot decode with utf-8 since it cannot decode arbitrary byte strings
+    
+    def runAll():
+        Task2Tests.task2_1
+        Task2Tests.task2_2
 
 
 def main():
-    Task1Tests.task1_1()
-    Task1Tests.task1_2()
-    Task1Tests.task1_3()
-    Task2Tests.task2_1()
-    Task2Tests.task2_2()
+    Task1Tests.runAll()
+    Task2Tests.runAll()
     
 
 
