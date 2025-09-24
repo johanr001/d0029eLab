@@ -38,7 +38,7 @@ def rsa_decrypt(ciphertext, private_key):
     M = hex(pow(C, d, n)).replace('0x', '')
     
     #Convert plaintext to ascii string and return
-    pt = bytes.fromhex(M).decode("utf-8")
+    pt = bytes.fromhex(M).decode("utf-8", errors="replace")
     return pt
 
 def sign_md5_hash(msg, private_key):
