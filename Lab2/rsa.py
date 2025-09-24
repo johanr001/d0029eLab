@@ -159,7 +159,7 @@ def task3():
     hash = "c6cf9f19fd74ebece68a2a210a6b4385dad760c60415f7615671284ee28712f6"
 
     verify = rsa_crypt(sig, (e, n))
-    verify = verify[-len(hash):]
+    verify = verify[-len(hash):]    # Removes everything but the hash
     if (hash == verify):
         print ("It's working!")
 
