@@ -43,7 +43,7 @@ def rsa_decrypt(ciphertext, private_key):
 
 def sign_md5_hash(msg, private_key):
     hash = get_hash(msg)
-    return rsa_crypt(hash, (private_key[0], private_key[1]))
+    return rsa_crypt(hash.encode(), (private_key[0], private_key[1]))
 
 def verify_md5_hash(msg, sig, public_key):
     message_hash = get_hash(msg)
@@ -61,9 +61,8 @@ def rsa_crypt(input, key):
     return hex(pow(text, exponent, modulus)).replace('0x', '')
 
 # Returns hash of given message
-def get_hash(message):
-    message = message.encode()
-    return hashlib.md5(message).hexdigest()
+def get_hash(message: bytes):
+    return hashlib.md5(message).hexdigest().lstrip('0') # Also strips leading zeroes to avoid integer issues
 
 # Tests for task 1
 class task1:
@@ -148,8 +147,11 @@ class task2:
         pub_k = temp[0]
         pri_k = temp[1]
 
-        sig = sign_md5_hash(msg, pri_k)
-        print(verify_md5_hash(msg, sig, pub_k))
+        sig = sign_md5_hash(msg.encode(), pri_k)
+        if (verify_md5_hash(msg.encode(), sig, pub_k)):
+            print("It's working!")
+        else:
+            print("It's not :(")
 
 def task3():
     # These values are taken from www.y8.com
@@ -162,9 +164,38 @@ def task3():
     verify = verify[-len(hash):]    # Removes everything but the hash
     if (hash == verify):
         print ("It's working!")
+    else:
+            print("It's not :(")
+
+def task4():
+    p='F7E75FDC469067FFDC4E847C51F452DF'
+    q='E85CED54AF57E53E092113E62F436F4F'
+    e='0D88C3'
+
+    temp  = generate_rsa_key(p, q, e)
+    pub_k  = temp[0]
+    pri_k  = temp[1]
+
+    with open("./Lab2/hello.pyc", "rb") as f:
+        ben_data = f.read()
+
+    with open("./Lab2/goodbye.pyc", "rb") as f:
+        mal_data = f.read()
+
+    sig = sign_md5_hash(ben_data, pri_k)
+
+    if (verify_md5_hash(mal_data, sig, pub_k)):
+        print("It's working!")
+    else:
+        print("It's not :(")
+    
 
 def main():
+    task2.task2_1()
+    task2.task2_2()
+    task2.task2_4()
     task3()
+    task4()
 
 if __name__ == "__main__":
     main()
