@@ -191,10 +191,10 @@ def task4():
     
 
 def main():
-    task2.task2_1()
-    task2.task2_2()
-    task2.task2_4()
-    task3()
+    # task2.task2_1()
+    # task2.task2_2()
+    # task2.task2_4()
+    # task3()
     task4()
 
 if __name__ == "__main__":
