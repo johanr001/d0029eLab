@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 from scapy.all import *
 
 # Sets up spoofed packet
